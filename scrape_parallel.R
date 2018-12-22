@@ -5,7 +5,7 @@ library(parallel)
 
 #### SET WORKING DIRECTORIES ####
 setwd("C:\\Users\\tadeu\\Desktop\\FGV\\code\\anthony")
-
+setwd('/home/tadeup/Documents/code/anthony')
 
 #### DECLARE SCRAPING FUNCTION ####
 scrape_rds <- function(index){
@@ -35,7 +35,13 @@ scrape_rds <- function(index){
 
 
 #### DETECT REMAINING INTERVAL ####
+
+## PC 1 ##
+interval <- 3000000:4000000
+
+## PC 2 ##
 interval <- 4000001:7821405
+
 
 files <- list.files(path = "res",pattern = ".rds")
 completed_files <- substring(files, 6, 12) %>% as.numeric()
