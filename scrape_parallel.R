@@ -1,5 +1,13 @@
 library(rvest)
+library(dplyr)
+library(parallel)
 
+
+#### SET WORKING DIRECTORIES ####
+setwd("C:\\Users\\tadeu\\Desktop\\FGV\\code\\anthony")
+
+
+#### DECLARE SCRAPING FUNCTION ####
 scrape_rds <- function(index){
   
   url_list_element <- sprintf("https://www.infomoney.com.br/mercados/noticia/%s", index)
@@ -25,12 +33,30 @@ scrape_rds <- function(index){
   }
 }
 
-interval <- 3000000:7821405
 
+#### DETECT REMAINING INTERVAL ####
+interval <- 4000001:7821405
+
+files <- list.files(path = "res",pattern = ".rds")
+completed_files <- substring(files, 6, 12) %>% as.numeric()
+
+stacks <- list.files(path = "stacks",pattern = ".rds")
+completed_stacks <- lapply(stacks, function(x)readRDS(sprintf("stacks/%s",x))) %>%
+  do.call(what = "rbind.data.frame") %>%
+  select(index) %>%
+  unlist() %>%
+  as.character() %>%
+  as.numeric()
+  
+
+new_interval <- interval[!(interval %in% completed_files)]
+new_interval <- new_interval[!(new_interval %in% completed_stacks)]
+
+
+#### INIT CLUSTER AND START SCRAPING ####
 cl <- makeCluster(detectCores())
-clusterEvalQ(cl, { library(rvest) })  # you need to export packages as well
+clusterEvalQ(cl, { library(rvest) })
 
-parLapply(cl, interval, scrape_rds)
+parLapply(cl, new_interval, scrape_rds)
 
-start_time - end_time
 stopCluster(cl)
