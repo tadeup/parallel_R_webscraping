@@ -40,8 +40,17 @@ scrape_rds <- function(index){
 interval <- 3000000:4000000
 
 ## PC 2 ##
-interval <- 4000001:7821405
+interval <- 4000001:7000000
 
+## VIRTUAL MACHINES ##
+interval <- 7000001:7121405
+interval <- 7121406:7221405
+interval <- 7221406:7321405
+interval <- 7321406:7421405
+interval <- 7421406:7521405
+interval <- 7521406:7621405
+interval <- 7621406:7721405
+interval <- 7721406:7821405
 
 files <- list.files(path = "res",pattern = ".rds")
 completed_files <- substring(files, 6, 12) %>% as.numeric()
